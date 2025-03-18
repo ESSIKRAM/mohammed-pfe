@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { AlertCircle, ArrowRight, Twitter } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { extractTweetId } from "@/services/twitter-api";
 
 interface UrlSubmissionFormProps {
   onSubmit?: (url: string) => void;
@@ -21,10 +22,8 @@ const UrlSubmissionForm = ({
   const [error, setError] = useState<string | null>(null);
 
   const validateUrl = (input: string): boolean => {
-    // Basic Twitter/X URL validation
-    const twitterUrlPattern =
-      /^https?:\/\/(twitter\.com|x\.com)\/[a-zA-Z0-9_]+\/status\/[0-9]+/i;
-    return twitterUrlPattern.test(input);
+    // Use the extractTweetId function to validate the URL
+    return !!extractTweetId(input);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

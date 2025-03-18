@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { TwitterApiProvider } from "./contexts/TwitterApiContext";
 import AuthModal from "./components/auth/AuthModal";
 import { useState } from "react";
 
@@ -80,7 +81,9 @@ function App() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <AuthProvider>
-        <AppRoutes />
+        <TwitterApiProvider>
+          <AppRoutes />
+        </TwitterApiProvider>
       </AuthProvider>
     </Suspense>
   );

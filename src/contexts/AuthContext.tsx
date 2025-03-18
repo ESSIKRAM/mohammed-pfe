@@ -20,19 +20,20 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
+}
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+// Using named function declaration for consistent component exports (helps Fast Refresh)
+export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,13 +53,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      // Check for premium test user
+      const isPremiumUser =
+        email === "premium@test.com" && password === "premium123";
+
       // Mock user data
       const userData: User = {
         id: "user-123",
-        username: "John Doe",
+        username: isPremiumUser ? "Premium Test User" : "John Doe",
         email,
-        isPremium: false,
-        remainingQueries: 3,
+        isPremium: isPremiumUser,
+        remainingQueries: isPremiumUser ? 999 : 3,
       };
 
       setUser(userData);
@@ -120,4 +125,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+}
